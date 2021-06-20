@@ -179,6 +179,7 @@ class PlayState extends MusicBeatState
 
 	// modcharting
 	var swapped:Bool = false;
+	var swapped2:Bool = false; // lol
 
 	function sustain2(strum:Int, spr:FlxSprite, note:Note):Void
 	{
@@ -421,7 +422,7 @@ class PlayState extends MusicBeatState
 				dad.y += 130;
 			case 'dad':
 				camPos.x += 400;
-			case 'pico' | 'bf' | 'bf-pixel':
+			case 'pico' | 'bf' | 'bf-pixel' | 'picoZERO' | 'bfZERO':
 				camPos.x += 600;
 				dad.y += 300;
 			case 'parents-christmas':
@@ -2700,13 +2701,25 @@ class PlayState extends MusicBeatState
 
 		// SWAPPIGN
 		
-		if (curBeat > 48 && curBeat < 80) {
+		if (curBeat > 47 && curBeat < 82) {
 			ModCharts.moveStrumNotes(playerStrums, swapped ? 609 : 0, strumLine.y, Conductor.crochet / 1000, 120, 0);
 			ModCharts.moveStrumNotes(player2Strums, swapped ? 0 : 609, strumLine.y, Conductor.crochet / 1000, 120, 0);
 			swapped = !swapped;
 		}
 
 		// character shit oooooo
+
+	/*	if (curBeat > 81 && curBeat % 2 == 1) {
+			remove(dad);
+			dad = new Character(100, 100, swapped2 ? SONG.player2 : 'picoZERO');
+			dad.y += 300;
+			add(dad);
+			remove(boyfriend);
+			boyfriend = new Boyfriend(100, 100, swapped2 ? SONG.player1 : 'bfZERO');
+			boyfriend.y += 300;
+			add(boyfriend);
+			swapped2 = !swapped2;
+		}*/
 
 		switch (curBeat)
 		{
@@ -2719,6 +2732,27 @@ class PlayState extends MusicBeatState
 				ModCharts.cameraBounce(FlxG.camera, (Conductor.crochet / 1000) * 2, -5); // / = * here ig
 			case 81:
 				ModCharts.cancelCamera(FlxG.camera.scroll);
+				ModCharts.fadeOutObject(dad, 2);
+			//	ModCharts.fadeOutObject(boyfriend, 2);
+				remove(dad);
+				dad = new Character(100, 100, swapped2 ? SONG.player2 : 'picoZERO');
+				dad.y += 300;
+				add(dad);
+			//	remove(boyfriend);
+			//	boyfriend = new Boyfriend(100, 100, swapped2 ? SONG.player1 : 'bfZERO');
+			//	boyfriend.y += 300;
+			//	add(boyfriend);
+				new FlxTimer().start(2, function(tmr:FlxTimer)
+				{
+					ModCharts.fadeInObject(dad);
+				//	ModCharts.fadeInObject(boyfriend);
+				});
+			case 96:
+				remove(boyfriend);
+				boyfriend = new Boyfriend(100, 100, swapped2 ? SONG.player1 : 'bfZERO');
+				boyfriend.y += 300;
+				add(boyfriend);
+				
 		}
 		// HARDCODING FOR MILF ZOOMS!
 		if (curSong.toLowerCase() == 'milf' && curBeat >= 168 && curBeat < 200 && camZooming && FlxG.camera.zoom < 1.35)
