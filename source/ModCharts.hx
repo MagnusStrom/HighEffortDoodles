@@ -100,7 +100,7 @@ class ModCharts
 	 */
 	static public function moveTo(sprite, x, y, duration)
 	{
-		FlxTween.linearMotion(sprite, sprite.x, sprite.y, x, y, duration, true, {type: FlxTween.ONESHOT, ease: FlxEase.quadInOut});
+		FlxTween.linearMotion(sprite, sprite.x, sprite.y, x, y, duration, true, {type: FlxTween.ONESHOT, ease: FlxEase.smoothStepInOut});
 	}
 
 	/**
@@ -200,7 +200,7 @@ class ModCharts
 	 * @param	distancebetweennotes	The distance between each strum note(DEFAULT 150)
 	 * @param	startingnum		The starting number for x. Not reccomended to use unless your porting things
 	 */
-	static public function moveStrumNotes(notesGroup:FlxTypedGroup<FlxSprite>, x, y, time, distancebetweennotes = 50, startingnum = 0)
+	static public function moveStrumNotes(notesGroup:FlxTypedGroup<FlxSprite>, x, y, time, distancebetweennotes = 112, startingnum = 0)
 	{
 		var num = 0;
 		notesGroup.forEach(function(note)
@@ -215,18 +215,18 @@ class ModCharts
 	 * Fades out an object.
 	 * @param object	The object to fade out
 	 */
-	static public function fadeOutObject(object)
+	static public function fadeOutObject(object, time:Int = 2)
 	{
-		FlxTween.tween(object, {"alpha": 0}, 2);
+		FlxTween.tween(object, {"alpha": 0}, time);
 	}
 
 	/**
 	 * Fades in an object.
 	 * @param object	The object to fade in
 	 */
-	static public function fadeInObject(object)
+	static public function fadeInObject(object, time:Int = 2)
 	{
-		FlxTween.tween(object, {"alpha": 1}, 2);
+		FlxTween.tween(object, {"alpha": 1}, time);
 	}
 
 	/**
@@ -249,6 +249,6 @@ class ModCharts
 	 */
 	static public function cameraBounce(camera:FlxCamera, duration:Float, intensity:Float = 200)
 	{
-		FlxTween.tween(camera, {'scroll.y': intensity}, duration, {ease: FlxEase.quadOut, type: FlxTweenType.PINGPONG});
+		FlxTween.tween(camera, {'scroll.y': intensity}, duration, {ease: FlxEase.expoInOut, type: FlxTweenType.PINGPONG});
 	}
 }
