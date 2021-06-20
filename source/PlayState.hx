@@ -118,7 +118,7 @@ class PlayState extends MusicBeatState
 
 	private var gfSpeed:Int = 1;
 
-	var health:Float = 1; // dont set to static
+	public var health:Float = 1; // dont set to static
 
 	private var combo:Int = 0;
 
@@ -186,6 +186,7 @@ class PlayState extends MusicBeatState
 	var swapped:Bool = false;
 	var swapped2:Bool = false; // lol
 	var phillybg:FlxSprite;
+	var skybg:FlxSprite;
 	var city:FlxSprite;
 	var street:FlxSprite;
 	var streetBehind:FlxSprite;
@@ -342,6 +343,10 @@ class PlayState extends MusicBeatState
 					phillybg = new FlxSprite(-100).loadGraphic(Paths.image('philly/sky'));
 					phillybg.scrollFactor.set(0.1, 0.1);
 					add(phillybg);
+					skybg = new FlxSprite(-100).loadGraphic(Paths.image('planeNight', 'shared'));
+					skybg.scrollFactor.set(0.1, 0.1);
+					add(skybg);
+					skybg.visible = false;
 
 					city = new FlxSprite(-10).loadGraphic(Paths.image('philly/city'));
 					city.scrollFactor.set(0.3, 0.3);
@@ -2608,6 +2613,7 @@ class PlayState extends MusicBeatState
 						boyfriend.playAnim('singUP', true);
 					}
 					iconP1.angle = 270;
+					iconP1.flipX = false;
 				case 3:
 					if (using2) {
 						boyfriend2.playAnim('singRIGHT', true);
@@ -2834,6 +2840,11 @@ class PlayState extends MusicBeatState
 			swapped = !swapped;
 		}
 
+		// sky
+		if (curBeat % 2 == 1 && curBeat < 79) {
+			phillybg.visible = !phillybg.visible;
+			skybg.visible = !skybg.visible;
+		}
 
 		switch (curBeat)
 		{
@@ -2885,7 +2896,7 @@ class PlayState extends MusicBeatState
 				});
 				ModCharts.cameraBounce(camHUD, Conductor.crochet / 1000, 20);
 			case 162:
-				endSong();
+			//	endSong();
 
 
 				

@@ -260,7 +260,7 @@ class ModCharts
 	* @param y	The new y value to set the strum line to.
 	**/
 	static public function setStrumLine(y:Float) {
-		trace("im lazy ill fix this later");
+	//	PlayState.strumLine.y = y;
 	}
 	/**
 	 * Bounces the camera up and down infenitley. WIP
