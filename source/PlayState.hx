@@ -91,6 +91,10 @@ class PlayState extends MusicBeatState
 	private var dad:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
+	private var dad2:Character;
+	private var boyfriend2:Boyfriend;
+
+	private var using2:Bool = false;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -2724,6 +2728,12 @@ class PlayState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
+				boyfriend2 = new Boyfriend(770, 450, swapped2 ? SONG.player1 : 'bfZERO');
+				boyfriend2.y += 300;
+				add(boyfriend2);
+				dad2 = new Character(100, 100, swapped2 ? SONG.player2 : 'picoZERO');
+				dad2.y += 300;
+				add(dad2);
 			/*	strumLineNotes.forEach(function(note)
 				{
 					//ModCharts.bounceLoop(note, Conductor.crochet / 1000);
@@ -2735,9 +2745,7 @@ class PlayState extends MusicBeatState
 				ModCharts.fadeOutObject(dad, 2);
 			//	ModCharts.fadeOutObject(boyfriend, 2);
 				remove(dad);
-				dad = new Character(100, 100, swapped2 ? SONG.player2 : 'picoZERO');
-				dad.y += 300;
-				add(dad);
+				add(dad2);
 			//	remove(boyfriend);
 			//	boyfriend = new Boyfriend(100, 100, swapped2 ? SONG.player1 : 'bfZERO');
 			//	boyfriend.y += 300;
@@ -2749,9 +2757,7 @@ class PlayState extends MusicBeatState
 				});
 			case 96:
 				remove(boyfriend);
-				boyfriend = new Boyfriend(100, 100, swapped2 ? SONG.player1 : 'bfZERO');
-				boyfriend.y += 300;
-				add(boyfriend);
+				add(boyfriend2);
 				
 		}
 		// HARDCODING FOR MILF ZOOMS!
@@ -2777,7 +2783,7 @@ class PlayState extends MusicBeatState
 		{
 			gf.dance();
 		}
-
+		
 		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
 		{
 			boyfriend.playAnim('idle');
