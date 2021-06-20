@@ -1,3 +1,5 @@
+import flixel.FlxObject;
+import flixel.FlxBasic;
 import flixel.group.FlxGroup;
 import flixel.FlxBasic.FlxType;
 import flixel.FlxCamera;
@@ -215,7 +217,7 @@ class ModCharts
 	 * Fades out an object.
 	 * @param object	The object to fade out
 	 */
-	static public function fadeOutObject(object, time:Int = 2)
+	static public function fadeOutObject(object:FlxObject, time:Int = 2)
 	{
 		FlxTween.tween(object, {"alpha": 0}, time);
 	}
@@ -224,9 +226,19 @@ class ModCharts
 	 * Fades in an object.
 	 * @param object	The object to fade in
 	 */
-	static public function fadeInObject(object, time:Int = 2)
+	static public function fadeInObject(object:FlxObject, time:Int = 2)
 	{
 		FlxTween.tween(object, {"alpha": 1}, time);
+	}
+
+	/**
+	* Zooms a camera.
+	* @param camera		A camera to zoom in
+	* @param zoom	The zoom to go in.
+	* @param time	How long it takes to zoom the camera
+	**/
+	static public function cameraZoom(camera, zoom, time) {
+		FlxTween.tween(camera, {"zoom": zoom}, time);
 	}
 
 	/**
@@ -243,6 +255,13 @@ class ModCharts
 		FlxTween.tween(object, {"alpha": 0}, 2, {ease: FlxEase.quadOut, type: FlxTween.PINGPONG});
 	}
 
+	/**
+	* Sets the strum line(The line where the noters must be hit).
+	* @param y	The new y value to set the strum line to.
+	**/
+	static public function setStrumLine(y:Float) {
+		trace("im lazy ill fix this later");
+	}
 	/**
 	 * Bounces the camera up and down infenitley. WIP
 	 * @param camera		The camera to bounce.

@@ -1,5 +1,6 @@
 package;
 
+import haxe.iterators.StringIterator;
 import flixel.addons.display.FlxBackdrop;
 import flixel.util.FlxAxes;
 import haxe.Timer;
@@ -184,6 +185,10 @@ class PlayState extends MusicBeatState
 	// modcharting
 	var swapped:Bool = false;
 	var swapped2:Bool = false; // lol
+	var phillybg:FlxSprite;
+	var city:FlxSprite;
+	var street:FlxSprite;
+	var streetBehind:FlxSprite;
 
 	function sustain2(strum:Int, spr:FlxSprite, note:Note):Void
 	{
@@ -334,11 +339,11 @@ class PlayState extends MusicBeatState
 		#end
 					curStage = 'philly';
 
-					var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('philly/sky'));
-					bg.scrollFactor.set(0.1, 0.1);
-					add(bg);
+					phillybg = new FlxSprite(-100).loadGraphic(Paths.image('philly/sky'));
+					phillybg.scrollFactor.set(0.1, 0.1);
+					add(phillybg);
 
-					var city:FlxSprite = new FlxSprite(-10).loadGraphic(Paths.image('philly/city'));
+					city = new FlxSprite(-10).loadGraphic(Paths.image('philly/city'));
 					city.scrollFactor.set(0.3, 0.3);
 					city.setGraphicSize(Std.int(city.width * 0.85));
 					city.updateHitbox();
@@ -358,18 +363,18 @@ class PlayState extends MusicBeatState
 						phillyCityLights.add(light);
 					}
 
-					var streetBehind:FlxSprite = new FlxSprite(-40, 50).loadGraphic(Paths.image('philly/behindTrain'));
+					streetBehind = new FlxSprite(-40, 50).loadGraphic(Paths.image('philly/behindTrain'));
 					add(streetBehind);
 
 					phillyTrain = new FlxSprite(2000, 360).loadGraphic(Paths.image('philly/train'));
 					add(phillyTrain);
 
-					trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
-					FlxG.sound.list.add(trainSound);
+				//	trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
+				//	FlxG.sound.list.add(trainSound);
 
 					// var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
 
-					var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('philly/street'));
+					street = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('philly/street'));
 					add(street);
 
 		var gfVersion:String = 'gf';
@@ -491,7 +496,7 @@ class PlayState extends MusicBeatState
 				gf.y += 300;
 		}
 
-		add(gf);
+		//add(gf);
 
 		// Shitty layering but whatev it works LOL
 		if (curStage == 'limo')
@@ -650,7 +655,11 @@ class PlayState extends MusicBeatState
 						camFollow.x = boyfriend.x;
 						FlxG.camera.focusOn(camFollow.getPosition());
 						FlxG.camera.zoom = 2.7;
-						boyfriend.playAnim('scared', true);
+						if (using2) {
+			boyfriend2.playAnim('scared', true);
+		} else {
+			boyfriend.playAnim('scared', true);
+		}
 						gf.playAnim('scared', true);
 
 						new FlxTimer().start(0.8, function(tmr:FlxTimer)
@@ -794,7 +803,11 @@ class PlayState extends MusicBeatState
 		{
 			dad.dance();
 			gf.dance();
+					if (using2) {
+			boyfriend2.playAnim('idle');
+		} else {
 			boyfriend.playAnim('idle');
+		}
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
@@ -1766,16 +1779,37 @@ class PlayState extends MusicBeatState
 							altAnim = '-alt';
 					}
 
+					iconP2.flipX = false;
 					switch (Math.abs(daNote.noteData))
 					{
 						case 0:
-							dad.playAnim('singLEFT' + altAnim, true);
+							if (using2) {
+								dad2.playAnim('singLEFT' + altAnim, true);
+							} else {
+								dad.playAnim('singLEFT' + altAnim, true);
+							}
+							iconP2.flipX = true;
 						case 1:
-							dad.playAnim('singDOWN' + altAnim, true);
+							if (using2) {
+								dad2.playAnim('singDOWN' + altAnim, true);
+							} else {
+								dad.playAnim('singDOWN' + altAnim, true);
+							}
+							iconP2.angle = 90;
 						case 2:
-							dad.playAnim('singUP' + altAnim, true);
+							if (using2) {
+								dad2.playAnim('singUP' + altAnim, true);
+							} else {
+								dad.playAnim('singUP' + altAnim, true);
+							}
+							iconP2.angle = 270;
 						case 3:
-							dad.playAnim('singRIGHT' + altAnim, true);
+							if (using2) {
+								dad2.playAnim('singRIGHT' + altAnim, true);
+							} else {
+								dad.playAnim('singRIGHT' + altAnim, true);
+							}
+							iconP2.angle = 0;
 					}
 					player2Strums.forEach(function(spr:FlxSprite)
 					{
@@ -2287,7 +2321,11 @@ class PlayState extends MusicBeatState
 		{
 			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
 			{
-				boyfriend.playAnim('idle');
+						if (using2) {
+			boyfriend2.playAnim('idle');
+		} else {
+			boyfriend.playAnim('idle');
+		}
 			}
 		}
 
@@ -2361,19 +2399,35 @@ class PlayState extends MusicBeatState
 				switch (direction)
 				{
 					case 0:
-						boyfriend.playAnim('singLEFTmiss', true);
+						if (using2) {
+			boyfriend2.playAnim('singLEFTmiss', true);
+		} else {
+			boyfriend.playAnim('singLEFTmiss', true);
+		}
 						if (FlxG.save.data.missshake)
 							FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 					case 1:
-						boyfriend.playAnim('singDOWNmiss', true);
+						if (using2) {
+			boyfriend2.playAnim('singDOWNmiss', true);
+		} else {
+			boyfriend.playAnim('singDOWNmiss', true);
+		}
 						if (FlxG.save.data.missshake)
 							FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 					case 2:
-						boyfriend.playAnim('singUPmiss', true);
+						if (using2) {
+			boyfriend2.playAnim('singUPmiss', true);
+		} else {
+			boyfriend.playAnim('singUPmiss', true);
+		}
 						if (FlxG.save.data.missshake)
 							FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 					case 3:
-						boyfriend.playAnim('singRIGHTmiss', true);
+						if (using2) {
+			boyfriend2.playAnim('singRIGHTmiss', true);
+		} else {
+			boyfriend.playAnim('singRIGHTmiss', true);
+		}
 						if (FlxG.save.data.missshake)
 							FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 				}
@@ -2414,19 +2468,35 @@ class PlayState extends MusicBeatState
 			switch (direction)
 			{
 				case 0:
-					boyfriend.playAnim('singLEFTmiss', true);
+					if (using2) {
+			boyfriend2.playAnim('singLEFTmiss', true);
+		} else {
+			boyfriend.playAnim('singLEFTmiss', true);
+		}
 					if (Config.MISSFX = true)
 						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 				case 1:
-					boyfriend.playAnim('singDOWNmiss', true);
+					if (using2) {
+			boyfriend2.playAnim('singDOWNmiss', true);
+		} else {
+			boyfriend.playAnim('singDOWNmiss', true);
+		}
 					if (Config.MISSFX = true)
 						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, Y);
 				case 2:
-					boyfriend.playAnim('singUPmiss', true);
+					if (using2) {
+			boyfriend2.playAnim('singUPmiss', true);
+		} else {
+			boyfriend.playAnim('singUPmiss', true);
+		}
 					if (Config.MISSFX = true)
 						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, Y);
 				case 3:
-					boyfriend.playAnim('singRIGHTmiss', true);
+					if (using2) {
+			boyfriend2.playAnim('singRIGHTmiss', true);
+		} else {
+			boyfriend.playAnim('singRIGHTmiss', true);
+		}
 					if (Config.MISSFX = true)
 						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 			}
@@ -2486,16 +2556,65 @@ class PlayState extends MusicBeatState
 					gf.playAnim('cheer', true);
 			}
 
+			/*						case 0:
+							if (using2) {
+								dad2.playAnim('singLEFT' + altAnim, true);
+							} else {
+								dad.playAnim('singLEFT' + altAnim, true);
+							}
+							iconP2.angle = 180;
+						case 1:
+							if (using2) {
+								dad2.playAnim('singDOWN' + altAnim, true);
+							} else {
+								dad.playAnim('singDOWN' + altAnim, true);
+							}
+							iconP2.angle = 90;
+						case 2:
+							if (using2) {
+								dad2.playAnim('singUP' + altAnim, true);
+							} else {
+								dad.playAnim('singUP' + altAnim, true);
+							}
+							iconP2.angle = 270;
+						case 3:
+							if (using2) {
+								dad2.playAnim('singRIGHT' + altAnim, true);
+							} else {
+								dad.playAnim('singRIGHT' + altAnim, true);
+							}
+							iconP2.angle = 0;*/
+			iconP1.flipX = true;
 			switch (note.noteData)
 			{
 				case 0:
-					boyfriend.playAnim('singLEFT', true);
+					if (using2) {
+						boyfriend2.playAnim('singLEFT', true);
+					} else {
+						boyfriend.playAnim('singLEFT', true);
+					}
+					iconP1.angle = 0;
 				case 1:
-					boyfriend.playAnim('singDOWN', true);
+					if (using2) {
+						boyfriend2.playAnim('singDOWN', true);
+					} else {
+						boyfriend.playAnim('singDOWN', true);
+					}
+					iconP1.angle = 0;
 				case 2:
-					boyfriend.playAnim('singUP', true);
+					if (using2) {
+						boyfriend2.playAnim('singUP', true);
+					} else {
+						boyfriend.playAnim('singUP', true);
+					}
+					iconP1.angle = 270;
 				case 3:
-					boyfriend.playAnim('singRIGHT', true);
+					if (using2) {
+						boyfriend2.playAnim('singRIGHT', true);
+					} else {
+						boyfriend.playAnim('singRIGHT', true);
+					}
+					iconP1.flipX = false;
 			}
 
 			playerStrums.forEach(function(spr:FlxSprite)
@@ -2550,21 +2669,21 @@ class PlayState extends MusicBeatState
 
 	function trainStart():Void
 	{
-		trainMoving = true;
-		if (!trainSound.playing)
-			trainSound.play(true);
+		//trainMoving = true;
+		//if (!trainSound.playing)
+		//	trainSound.play(true);
 	}
 
 	var startedMoving:Bool = false;
 
 	function updateTrainPos():Void
 	{
-		if (trainSound.time >= 4700)
+	/*	if (trainSound.time >= 4700)
 		{
 			startedMoving = true;
 			gf.playAnim('hairBlow');
 			camera.shake(0.002, 0.1, null, true, X);
-		}
+		}*/
 
 		if (startedMoving)
 		{
@@ -2605,7 +2724,11 @@ class PlayState extends MusicBeatState
 		lightningStrikeBeat = curBeat;
 		lightningOffset = FlxG.random.int(8, 24);
 
-		boyfriend.playAnim('scared', true);
+		if (using2) {
+			boyfriend2.playAnim('scared', true);
+		} else {
+			boyfriend.playAnim('scared', true);
+		}
 		gf.playAnim('scared', true);
 	}
 
@@ -2624,8 +2747,8 @@ class PlayState extends MusicBeatState
 				ModCharts.moveStrumNotes(playerStrums, 609, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);
 				ModCharts.moveStrumNotes(player2Strums, 0, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);
 			case 114, 118, 122, 176, 180:
-				ModCharts.moveStrumNotes(playerStrums, 619, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);
-				ModCharts.moveStrumNotes(player2Strums, 10, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);
+				ModCharts.moveStrumNotes(playerStrums, 659, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);
+				ModCharts.moveStrumNotes(player2Strums, 50, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);
 		/*	case 123, 124, 125: // lol
 				ModCharts.moveStrumNotes(playerStrums, 690, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);
 				ModCharts.moveStrumNotes(player2Strums, 50, strumLineNotes.getFirstAlive().y, 0.001, 112, -112);*/
@@ -2711,53 +2834,60 @@ class PlayState extends MusicBeatState
 			swapped = !swapped;
 		}
 
-		// character shit oooooo
-
-	/*	if (curBeat > 81 && curBeat % 2 == 1) {
-			remove(dad);
-			dad = new Character(100, 100, swapped2 ? SONG.player2 : 'picoZERO');
-			dad.y += 300;
-			add(dad);
-			remove(boyfriend);
-			boyfriend = new Boyfriend(100, 100, swapped2 ? SONG.player1 : 'bfZERO');
-			boyfriend.y += 300;
-			add(boyfriend);
-			swapped2 = !swapped2;
-		}*/
 
 		switch (curBeat)
 		{
 			case 1:
 				boyfriend2 = new Boyfriend(770, 450, swapped2 ? SONG.player1 : 'bfZERO');
-				boyfriend2.y += 300;
-				add(boyfriend2);
+				boyfriend2.alpha = 0;
 				dad2 = new Character(100, 100, swapped2 ? SONG.player2 : 'picoZERO');
 				dad2.y += 300;
-				add(dad2);
+				dad2.alpha = 0;
 			/*	strumLineNotes.forEach(function(note)
 				{
 					//ModCharts.bounceLoop(note, Conductor.crochet / 1000);
 				});*/
 				// im lazy
 				ModCharts.cameraBounce(FlxG.camera, (Conductor.crochet / 1000) * 2, -5); // / = * here ig
-			case 81:
+			case 80:
 				ModCharts.cancelCamera(FlxG.camera.scroll);
-				ModCharts.fadeOutObject(dad, 2);
-			//	ModCharts.fadeOutObject(boyfriend, 2);
-				remove(dad);
-				add(dad2);
-			//	remove(boyfriend);
-			//	boyfriend = new Boyfriend(100, 100, swapped2 ? SONG.player1 : 'bfZERO');
-			//	boyfriend.y += 300;
-			//	add(boyfriend);
-				new FlxTimer().start(2, function(tmr:FlxTimer)
-				{
-					ModCharts.fadeInObject(dad);
-				//	ModCharts.fadeInObject(boyfriend);
-				});
-			case 96:
-				remove(boyfriend);
+				// character shit ooooo (glad i did it this way, that other way was CANCER and i would have gotten HELLA bullied by smokey.)
+				ModCharts.fadeOutObject(boyfriend);
+				ModCharts.fadeOutObject(dad);
 				add(boyfriend2);
+				add(dad2);
+				phillybg.setGraphicSize(10000); // im retarded
+				ModCharts.fadeOutObject(city);
+				phillyCityLights.forEach(function(light)
+				{
+					ModCharts.fadeOutObject(light);
+				});
+				ModCharts.fadeOutObject(streetBehind);
+				ModCharts.fadeOutObject(street);
+				ModCharts.circleLoop(dad2, 100, 5);
+				ModCharts.circleLoop(boyfriend2, 150, 3);
+				ModCharts.cameraZoom(FlxG.camera, 0.6, 3);
+				defaultCamZoom = 0.6;
+				strumLineNotes.forEach(function(note) {
+					ModCharts.circleLoop(note, 125, 3);
+				});
+				phillybg.y += 300;
+				new FlxTimer().start(2, function(tmr:FlxTimer)
+					{
+						ModCharts.fadeInObject(boyfriend2);
+						ModCharts.fadeInObject(dad2);
+					});
+				
+				using2 = true;
+			case 112:
+				strumLineNotes.forEach(function(note) {
+					ModCharts.circleLoop(note, 125, 3);
+				});
+				ModCharts.cameraBounce(camHUD, Conductor.crochet / 1000, 20);
+			case 162:
+				endSong();
+
+
 				
 		}
 		// HARDCODING FOR MILF ZOOMS!
@@ -2783,10 +2913,14 @@ class PlayState extends MusicBeatState
 		{
 			gf.dance();
 		}
-		
+
 		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
 		{
+					if (using2) {
+			boyfriend2.playAnim('idle');
+		} else {
 			boyfriend.playAnim('idle');
+		}
 		}
 
 		if (curBeat % 8 == 7 && curSong == 'Bopeebo')
