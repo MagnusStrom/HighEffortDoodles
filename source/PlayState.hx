@@ -2861,6 +2861,15 @@ class PlayState extends MusicBeatState
 				// im lazy
 				ModCharts.cameraBounce(FlxG.camera, (Conductor.crochet / 1000) * 2, -5); // / = * here ig
 			case 80:
+				// hardcode
+				var block:FlxSprite = new FlxSprite(-500, -1000).makeGraphic(5000, 5000, FlxColor.BLACK);
+				block.alpha = 0;
+				add(block);
+				ModCharts.fadeInObject(block);
+				ModCharts.fadeOutObject(camHUD);
+
+				skybg.visible = false;
+				phillybg.visible = true;
 				ModCharts.cancelCamera(FlxG.camera.scroll);
 				// character shit ooooo (glad i did it this way, that other way was CANCER and i would have gotten HELLA bullied by smokey.)
 				ModCharts.fadeOutObject(boyfriend);
@@ -2887,13 +2896,15 @@ class PlayState extends MusicBeatState
 					{
 						ModCharts.fadeInObject(boyfriend2);
 						ModCharts.fadeInObject(dad2);
+						ModCharts.fadeOutObject(block);
+						ModCharts.fadeInObject(camHUD);
 					});
 				
 				using2 = true;
 			case 112:
-				strumLineNotes.forEach(function(note) {
+				/*strumLineNotes.forEach(function(note) {
 					ModCharts.circleLoop(note, 125, 3);
-				});
+				});*/
 				ModCharts.cameraBounce(camHUD, Conductor.crochet / 1000, 20);
 			case 162:
 			//	endSong();

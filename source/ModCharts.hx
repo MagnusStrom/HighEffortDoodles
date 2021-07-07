@@ -217,7 +217,7 @@ class ModCharts
 	 * Fades out an object.
 	 * @param object	The object to fade out
 	 */
-	static public function fadeOutObject(object:FlxObject, time:Int = 2)
+	static public function fadeOutObject(object:Any, time:Int = 2)
 	{
 		FlxTween.tween(object, {"alpha": 0}, time);
 	}
@@ -226,7 +226,7 @@ class ModCharts
 	 * Fades in an object.
 	 * @param object	The object to fade in
 	 */
-	static public function fadeInObject(object:FlxObject, time:Int = 2)
+	static public function fadeInObject(object:Any, time:Int = 2)
 	{
 		FlxTween.tween(object, {"alpha": 1}, time);
 	}
